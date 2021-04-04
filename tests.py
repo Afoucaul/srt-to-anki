@@ -7,12 +7,12 @@ import zipfile
 import anki
 import bs4 as bs
 
-from srt_parser import Card
-from srt_parser import get_words_from_srt_file
-from srt_parser import make_anki_deck_from_srt_file
-from srt_parser import make_card_from_word
-from srt_parser import make_cards_from_srt_file
-from srt_parser import parse_srt_file
+from srt_to_anki.srt_to_anki import Card
+from srt_to_anki.srt_to_anki import get_words_from_srt_file
+from srt_to_anki.srt_to_anki import make_anki_deck_from_srt_file
+from srt_to_anki.srt_to_anki import make_card_from_word
+from srt_to_anki.srt_to_anki import make_cards_from_srt_file
+from srt_to_anki.srt_to_anki import parse_srt_file
 
 
 class TestSrtParser(unittest.TestCase):
