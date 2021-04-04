@@ -32,29 +32,30 @@ class Card:
         return hash(self.front)
 
 
-def make_anki_deck_from_srt_file(srt_file: Path, *, name: str, output_dir: Path) -> Path:
+def make_anki_deck_from_srt_file(
+    srt_file: Path, *, name: str, output_dir: Path
+) -> Path:
     srt_file = srt_file.absolute()
     deck = genanki.Deck(1, name)
     model = genanki.Model(
         1,
-        'Simple Model',
+        "Simple Model",
         fields=[
-            {'name': 'Question'},
-            {'name': 'Answer'},
+            {"name": "Question"},
+            {"name": "Answer"},
         ],
-        templates=[{
-            'name': 'Card 1',
-            'qfmt': '{{Question}}',
-            'afmt': '{{Answer}}',
-        }]
+        templates=[
+            {
+                "name": "Card 1",
+                "qfmt": "{{Question}}",
+                "afmt": "{{Answer}}",
+            }
+        ],
     )
 
     cards = make_cards_from_srt_file(srt_file)
     for card in cards:
-        note = genanki.Note(
-            model=model,
-            fields=[card.front, card.back]
-        )
+        note = genanki.Note(model=model, fields=[card.front, card.back])
         deck.add_note(note)
 
     output_path = (output_dir / f"{name}.apkg").absolute()
@@ -92,7 +93,7 @@ def make_card_from_word(word: str) -> Optional[Card]:
             kana=jisho_data["japanese"][0]["reading"],
             senses=", ".join(
                 sense["english_definitions"][0] for sense in jisho_data["senses"]
-            )
+            ),
         )
 
         return Card(front, back)
@@ -103,8 +104,7 @@ def make_card_from_word(word: str) -> Optional[Card]:
 
 def search_word_on_jisho(word: str) -> Dict[Any, Any]:
     return requests.get(
-        "https://jisho.org/api/v1/search/words",
-        params={"keyword": word}
+        "https://jisho.org/api/v1/search/words", params={"keyword": word}
     ).json()["data"][0]
 
 
