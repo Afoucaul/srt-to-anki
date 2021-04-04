@@ -2,7 +2,6 @@ import argparse
 import logging
 from pathlib import Path
 
-
 from .srt_to_anki import make_anki_deck_from_srt_file
 
 

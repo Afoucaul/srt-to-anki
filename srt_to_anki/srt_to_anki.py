@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import argparse
 import dataclasses as dc
@@ -68,29 +68,7 @@ def make_cards_from_srt_file(srt_file: Path) -> List[Card]:
     with mp_dummy.Pool(20) as pool:
         cards = pool.map(make_card_from_word, words)
 
-    return cards
-
-
-def make_card_from_word(word: str) -> Card:
-    LOGGER.info("Making card for word %s", word)
-    jisho_data = search_word_on_jisho(word)
-
-    front = jisho_data["japanese"][0]["word"]
-    back = "【{kana}】: {senses}".format(
-        kana=jisho_data["japanese"][0]["reading"],
-        senses=", ".join(
-            sense["english_definitions"][0] for sense in jisho_data["senses"]
-        )
-    )
-
-    return Card(front, back)
-
-
-def search_word_on_jisho(word: str) -> Dict[Any, Any]:
-    return requests.get(
-        "https://jisho.org/api/v1/search/words",
-        params={"keyword": word}
-    ).json()["data"][0]
+    return [card for card in cards if card is not None]
 
 
 def get_words_from_srt_file(srt_path: Path) -> List[str]:
@@ -101,6 +79,33 @@ def get_words_from_srt_file(srt_path: Path) -> List[str]:
         if re.match(r"^\p{Han}[\p{Han}\p{Hiragana}\p{Katakana}]*$", segment)
     ]
     return segments
+
+
+def make_card_from_word(word: str) -> Optional[Card]:
+    LOGGER.info("Making card for word %s", word)
+
+    try:
+        jisho_data = search_word_on_jisho(word)
+
+        front = jisho_data["japanese"][0]["word"]
+        back = "【{kana}】: {senses}".format(
+            kana=jisho_data["japanese"][0]["reading"],
+            senses=", ".join(
+                sense["english_definitions"][0] for sense in jisho_data["senses"]
+            )
+        )
+
+        return Card(front, back)
+
+    except:
+        return None
+
+
+def search_word_on_jisho(word: str) -> Dict[Any, Any]:
+    return requests.get(
+        "https://jisho.org/api/v1/search/words",
+        params={"keyword": word}
+    ).json()["data"][0]
 
 
 def parse_srt_file(srt_path: Path) -> List[str]:
