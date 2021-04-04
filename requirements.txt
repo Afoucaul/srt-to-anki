@@ -1,0 +1,4 @@
+genanki
+nagisa
+regex
+requests
