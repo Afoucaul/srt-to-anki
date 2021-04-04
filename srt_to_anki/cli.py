@@ -18,9 +18,3 @@ def make_argparser() -> argparse.ArgumentParser:
     parser.add_argument("srt", type=Path)
 
     return parser
-
-
-if __name__ == "__main__":
-    argparser = make_argparser()
-    args = argparser.parse_args()
-    main(srt_file=args.srt, output_name=args.name, output_dir=args.output_dir)
