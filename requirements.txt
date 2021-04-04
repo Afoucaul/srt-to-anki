@@ -1,4 +1,5 @@
 genanki
+mypyt
 nagisa
 regex
 requests
