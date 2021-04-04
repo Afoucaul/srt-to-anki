@@ -9,5 +9,5 @@ python3 -m pip install git+https://git@github.com/Afoucaul/srt-to-anki
 ## Usage
 
 ```
-python3 -m srt-to-anki --name deck subtitles.srt
+srt-to-anki --name NAME [--output-dir OUTPUT_DIR] srt
 ```
